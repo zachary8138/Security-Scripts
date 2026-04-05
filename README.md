@@ -30,3 +30,19 @@ JSON output that includes scan metadata and detected vulnerabilties: ```{
 
 Read the contents of your JSON file: ```cat results.json | jq '.results[] | {url, confidence}'```
 
+#### HTTP Security Header Checker.pl 
+
+Provides a quick way to scan a website to check if it implements recommended security headers such as HSTS, CSP, and X-Frame-Options. This helps identify potential misconfigurations that could expose the site to attacks like clickjacking, XSS, or protocol downgrade attacks.
+```perl Secure_header_check.pl -u https://example.com```
+
+Use the --json option to automate checks in a CI/CD workflow. For example, fail a deployment if critical security headers are missing.
+
+```perl Secure_header_check.pl -u https://staging.example.com --json > header_report.json```
+
+Combine the script with a list of URLs to audit multiple sites at once, useful for agencies, pentesters, or security teams managing multiple clients:
+
+```cat domains.txt | xargs -I {} perl Secure_header_check.pl -u {} --json```
+
+Enable verbose mode to see all headers, including non-critical ones, which is helpful during debugging or fine-tuning a site’s security headers:
+
+```perl Secure_header_check.pl -u https://example.com -v```
