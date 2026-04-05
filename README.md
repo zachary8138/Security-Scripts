@@ -3,6 +3,9 @@ A collection of scripts I've used for pentesting, security checks, and various o
 
 ## advanced_sqli_scanner.py
 
+This is a helpful little HTTP scanner that sends SQL injection payloads into URLs (query parameters), classifies attempts by injection style (e.g. error-based, UNION, boolean blind, time-based), and uses response analysis plus heuristics to flag likely issues, with confidence scores and optional DB fingerprinting.
+
+
 Enable JSON output using the --json flag: ```python advanced_sqli_scanner.py -u http://example.com/page.php?id= --json```
 
 To save the JSON output to a file ```python advanced_sqli_scanner.py -u http://example.com/page.php?id= --json -o results.json```
