@@ -1,7 +1,7 @@
 # Security-Scripts
 A collection of scripts I've used for pentesting, security checks, and various other infosec related tasks.  
 
-#### advanced_sqli_scanner.py
+## advanced_sqli_scanner.py
 
 Enable JSON output using the --json flag: ```python advanced_sqli_scanner.py -u http://example.com/page.php?id= --json```
 
@@ -30,7 +30,7 @@ JSON output that includes scan metadata and detected vulnerabilties: ```{
 
 Read the contents of your JSON file: ```cat results.json | jq '.results[] | {url, confidence}'```
 
-#### HTTP Security Header Checker.pl 
+## HTTP Security Header Checker.pl 
 
 Provides a quick way to scan a website to check if it implements recommended security headers such as HSTS, CSP, and X-Frame-Options. This helps identify potential misconfigurations that could expose the site to attacks like clickjacking, XSS, or protocol downgrade attacks.
 ```perl Secure_header_check.pl -u https://example.com```
@@ -46,3 +46,58 @@ Combine the script with a list of URLs to audit multiple sites at once, useful f
 Enable verbose mode to see all headers, including non-critical ones, which is helpful during debugging or fine-tuning a site’s security headers:
 
 ```perl Secure_header_check.pl -u https://example.com -v```
+
+#### WiFi-Deauth.py
+
+Small 802.11 deauthentication/disassociation helper built with Scapy.  It injects frames from a wireless interface in monitor mode (requires root).
+Make sure you're using your own lab hardware or obtain written permission before using.  Unauthorized use is not legal in all jurisdictions.
+
+#### When it’s useful
+
+- **Wireless security assessments** — Check whether clients drop or reconnect when management frames are spoofed, and how the environment behaves under stress.
+- **802.11w / PMF awareness** — If clients and APs use **protected management frames**, deauth/disassoc may have **no effect**; the script helps you observe that in practice (not detect it automatically).
+- **Roam / resilience testing** — See how devices and apps behave when the link is torn down and re-established.
+- **Tooling and lab workflows** — Pair with channel setup (`iw`, `airmon-ng`, etc.), captures, and your own notes; use **`--dry-run`** to verify frame layout before transmitting.
+
+#### Requirements
+
+- Python 3  
+- [Scapy](https://scapy.net/)  
+- A Wi-Fi adapter that supports **monitor mode** and **injection**  
+- Interface on the **same channel** as the target BSS (configure outside the script)
+
+#### Ways to use it
+
+```bash
+# Target one client (STA) from a spoofed “AP” perspective (default direction)
+sudo python3 WiFi-Deauth.py <STA_MAC> <BSSID> -i wlan0mon
+
+# Continuous until Ctrl+C
+sudo python3 WiFi-Deauth.py <STA_MAC> <BSSID> -c 0 --inter 0.05
+
+# Broadcast (all associated clients on that BSSID) — one MAC argument
+sudo python3 WiFi-Deauth.py --broadcast <BSSID> -i wlan0mon
+
+# Disassociation, or both deauth + disassoc per cycle
+sudo python3 WiFi-Deauth.py <STA_MAC> <BSSID> --frame disassoc
+sudo python3 WiFi-Deauth.py <STA_MAC> <BSSID> --frame both
+
+# Reverse direction (STA → AP) when the other direction is ignored
+sudo python3 WiFi-Deauth.py <STA_MAC> <BSSID> --sta-to-ap
+
+# Inspect frames without transmitting (no root needed)
+python3 WiFi-Deauth.py <STA_MAC> <BSSID> --dry-run
+
+# Interfaces Scapy can see
+python3 WiFi-Deauth.py --list-ifaces
+```
+
+BSSID can also be passed as **`-b` / `--bssid`** when that’s clearer than positionals. Full options: **`python3 WiFi-Deauth.py --help`**.
+
+#### Limitations
+
+- Does not set **channel** or put the card in **monitor mode** for you.  
+- **802.11w**, driver behavior, and distance all affect whether frames have any impact.  
+- Use only where you are **legally and ethically** allowed to do so.
+
+
