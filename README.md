@@ -108,17 +108,24 @@ BSSID can also be passed as **`-b` / `--bssid`** when that’s clearer than posi
 #### Features
 
 Host Discovery: Performs a ping scan (-sn) to identify live hosts on a specified network range.
+
 TCP Port Scanning: Scans a user-defined set of TCP ports (default set includes common ports like SSH, HTTP, FTP, and more).
+
 Customizable: You can specify the range of ports to scan and the timing template for the scan (to balance between speed and accuracy).
+
 Flexible Output Formats: Outputs results in either human-readable text format or structured JSON format.
+
 File Output: Optionally, save the results to a file (supports both text and JSON formats).
 
 #### Prerequisites
 nmap: The tool requires nmap to be installed on your system. It must be available on the system’s PATH.
 
 Installation on Linux: ```sudo apt-get install nmap```
+
 Installation on macOS: ```brew install nmap```
+
 Installation on Windows: https://nmap.org/download.html
+
 python-nmap: A Python library to interface with nmap.
 
 Install via pip: ```pip install python-nmap```
@@ -154,7 +161,9 @@ Choose a timing template from 0 to 5, where 0 is the slowest and 5 is the fastes
 ## Troubleshooting
 
 nmap not found: Ensure that nmap is installed and available in your system's PATH. You can verify this by running nmap --version in your terminal.
+
 Permission Issues: Ensure you have the necessary permissions to execute nmap and access network interfaces.
+
 Install python-nmap: If the script reports missing python-nmap, you can install it via pip:
 
 
