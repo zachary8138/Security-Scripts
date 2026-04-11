@@ -164,7 +164,7 @@ nmap not found: Ensure that nmap is installed and available in your system's PAT
 
 Permission Issues: Ensure you have the necessary permissions to execute nmap and access network interfaces.
 
-Install python-nmap: If the script reports missing python-nmap, you can install it via pip:
+Install python-nmap: If the script reports missing python-nmap, you can install it via pip: ```pip install python-nmap```
 
 
 
